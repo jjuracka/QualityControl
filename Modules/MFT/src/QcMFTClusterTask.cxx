@@ -416,7 +416,6 @@ void QcMFTClusterTask::endOfCycle()
       mClusterRinLayer[nMFTLayer]->getNum()->SetLineColor(TColor::GetColor(mColors[nMFTLayer]));
       mClusterRinLayer[nMFTLayer]->getNum()->SetLineWidth(2);
       mClusterRinLayer[nMFTLayer]->getNum()->SetStats(0);
-      mClusterRinLayer[nMFTLayer]->getNum()->SetMaximum(getHistoMax() * 1.1);
       mClusterRinLayer[nMFTLayer]->getNum()->Draw(nMFTLayer == 0 ? "hist" : "hist same");
       mClusterRinAllLayersLegend->AddEntry(mClusterRinLayer[nMFTLayer]->getNum(), Form("layer %d", nMFTLayer), "l");
     }
@@ -475,16 +474,6 @@ void QcMFTClusterTask::getChipMapData()
     mX[i] = MFTTable.mX[i];
     mY[i] = MFTTable.mY[i];
   }
-}
-
-float QcMFTClusterTask::getHistoMax()
-{
-  float histoMax = 0.0;
-  for (auto nMFTLayer = 0; nMFTLayer < 10; nMFTLayer++) {
-    if (histoMax < mClusterRinLayer[nMFTLayer]->getNum()->GetMaximum())
-      histoMax = mClusterRinLayer[nMFTLayer]->getNum()->GetMaximum();
-  }
-  return histoMax;
 }
 
 } // namespace o2::quality_control_modules::mft
