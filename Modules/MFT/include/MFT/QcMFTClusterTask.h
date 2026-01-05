@@ -107,6 +107,7 @@ class QcMFTClusterTask /*final*/ : public TaskInterface // todo add back the "fi
 
   // internal functions
   void getChipMapData();
+  float getHistoMax();
 
   // cluster size in pixels
   int mClusterSize = { 0 };
