@@ -28,6 +28,7 @@
 #include <TH2.h>
 #include <TString.h>
 #include <TAxis.h>
+#include <TColor.h>
 // O2
 #include <DataFormatsITSMFT/CompCluster.h>
 #include <Framework/InputRecord.h>
@@ -406,10 +407,19 @@ void QcMFTClusterTask::endOfCycle()
     for (int i = 0; i < 20; i++)
       mClusterChipOccupancyMap[i]->update();
     // layer histograms
+    mClusterRinAllLayers->cd();
+    mClusterRinAllLayersLegend->Clear();
     for (auto nMFTLayer = 0; nMFTLayer < 10; nMFTLayer++) { // there are 10 layers
       mClusterXYinLayer[nMFTLayer]->update();
       mClusterRinLayer[nMFTLayer]->update();
+      mClusterRinLayer[nMFTLayer]->getNum()->SetTitle("Cluster Radial Position in all MFT Layers; r (cm); # entries");
+      mClusterRinLayer[nMFTLayer]->getNum()->SetLineColor(TColor::GetColor(mColors[nMFTLayer]));
+      mClusterRinLayer[nMFTLayer]->getNum()->SetLineWidth(2);
+      mClusterRinLayer[nMFTLayer]->getNum()->SetStats(0);
+      mClusterRinLayer[nMFTLayer]->getNum()->Draw(nMFTLayer == 0 ? "hist" : "hist same");
+      mClusterRinAllLayersLegend->AddEntry(mClusterRinLayer[nMFTLayer]->getNum(), Form("layer %d", nMFTLayer), "l");
     }
+    mClusterRinAllLayersLegend->Draw();
   }
 }
 
@@ -442,6 +452,8 @@ void QcMFTClusterTask::reset()
       mClusterXYinLayer[nMFTLayer]->Reset();
       mClusterRinLayer[nMFTLayer]->Reset();
     }
+    mClusterRinAllLayers->Clear();
+    mClusterRinAllLayersLegend->Clear();
   }
 }
 

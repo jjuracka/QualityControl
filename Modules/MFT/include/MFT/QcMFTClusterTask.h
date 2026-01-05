@@ -92,8 +92,8 @@ class QcMFTClusterTask /*final*/ : public TaskInterface // todo add back the "fi
 
   int mOnlineQC;
 
-  int mColors[10] = { kRed+1, kBlue+1, kGreen+2, kMagenta+1, kCyan+1, kOrange+7, kViolet, kTeal+3, kSpring+5, kPink+1 };
-
+  const TString mColors[10] = { "#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#8C564B", "#E377C2", "#9467BD", "#BCBD22", "#7F7F7F", "#17BECF" };
+  
   // needed to construct the name and path of some histograms
   int mHalf[936] = { 0 };
   int mDisk[936] = { 0 };
