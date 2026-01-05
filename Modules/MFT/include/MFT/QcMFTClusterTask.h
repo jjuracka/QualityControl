@@ -16,6 +16,7 @@
 /// \author Katarina Krizkova Gajdosova
 /// \author Diana Maria Krupova
 /// \author David Grund
+/// \author Jakub Juracka
 ///
 
 #ifndef QC_MFT_CLUSTER_TASK_H
