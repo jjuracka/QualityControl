@@ -24,6 +24,8 @@
 
 #include <TH1F.h>
 #include <TH2F.h>
+#include <TCanvas.h>
+#include <TLegend.h>
 #include <DataFormatsITSMFT/TopologyDictionary.h>
 #include "ReconstructionDataFormats/BaseCluster.h"
 #include "MFTBase/GeometryTGeo.h"
@@ -80,6 +82,8 @@ class QcMFTClusterTask /*final*/ : public TaskInterface // todo add back the "fi
   std::unique_ptr<TH1FRatio> mClusterZ = nullptr;
   std::vector<std::unique_ptr<TH2FRatio>> mClusterXYinLayer;
   std::vector<std::unique_ptr<TH1FRatio>> mClusterRinLayer;
+  std::unique_ptr<TCanvas> mClusterRinAllLayers = nullptr;
+  std::unique_ptr<TLegend> mClusterRinAllLayersLegend = nullptr;
 
   std::unique_ptr<TH1FRatio> mClustersROFSize = nullptr;
   std::unique_ptr<TH1FRatio> mClustersBC = nullptr;
@@ -87,6 +91,8 @@ class QcMFTClusterTask /*final*/ : public TaskInterface // todo add back the "fi
   std::vector<o2::BaseCluster<float>> mClustersGlobal;
 
   int mOnlineQC;
+
+  int mColors[10] = { kRed+1, kBlue+1, kGreen+2, kMagenta+1, kCyan+1, kOrange+7, kViolet, kTeal+3, kSpring+5, kPink+1 };
 
   // needed to construct the name and path of some histograms
   int mHalf[936] = { 0 };

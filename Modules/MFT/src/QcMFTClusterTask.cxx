@@ -254,6 +254,13 @@ void QcMFTClusterTask::initialize(o2::framework::InitContext& /*ctx*/)
       getObjectsManager()->startPublishing(mClusterRinLayer[nMFTLayer].get());
       getObjectsManager()->setDisplayHint(mClusterRinLayer[nMFTLayer].get(), "hist");
     }
+
+    // canvas for for cluster R in all layers
+    mClusterRinAllLayers = std::make_unique<TCanvas>("mClusterRinAllLayers", "Cluster Radial Position in All MFT Layers", 1000, 800);
+    getObjectsManager()->startPublishing(mClusterRinAllLayers.get());
+    mClusterRinAllLayersLegend = std::make_unique<TLegend>(0.75, 0.45, 0.89, 0.89);
+    mClusterRinAllLayersLegend->SetBorderSize(0);
+    mClusterRinAllLayersLegend->SetFillStyle(0);
   }
 }
 
