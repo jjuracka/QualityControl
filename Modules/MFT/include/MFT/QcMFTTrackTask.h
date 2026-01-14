@@ -76,6 +76,10 @@ class QcMFTTrackTask /*final*/ : public TaskInterface // todo add back the "fina
   std::array<unique_ptr<TH1FRatio>, 6> mTrackPhiNCls = { nullptr };
   std::array<unique_ptr<TH2FRatio>, 6> mTrackXYNCls = { nullptr };
   std::array<unique_ptr<TH2FRatio>, 6> mTrackEtaPhiNCls = { nullptr };
+  std::unique_ptr<TH1FRatio> mTrackEta4Cls = nullptr;
+  std::unique_ptr<TH1FRatio> mTrackPhi4Cls = nullptr;
+  std::unique_ptr<TH2FRatio> mTrackXY4Cls = nullptr;
+  std::unique_ptr<TH2FRatio> mTrackEtaPhi4Cls = nullptr;
   std::unique_ptr<TH1FRatio> mCATrackEta = nullptr;
   std::unique_ptr<TH1FRatio> mLTFTrackEta = nullptr;
   std::unique_ptr<TH1FRatio> mCATrackPt = nullptr;

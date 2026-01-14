@@ -83,6 +83,12 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
     TimeBinSize = stof(param->second);
   }
 
+  auto IsCosmics = false;
+  if (auto param = mCustomParameters.find("IsCosmics"); param != mCustomParameters.end()) {
+    ILOG(Debug, Devel) << "Custom parameter - IsCosmics: " << param->second << ENDM;
+    IsCosmics = (param->second == "true");
+  }
+
   auto NofTimeBins = static_cast<int>(MaxDuration / TimeBinSize);
 
   // Creating histos
@@ -154,6 +160,24 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
     mTrackEtaPhiNCls[nHisto] = std::make_unique<TH2FRatio>(Form("mMFTTrackEtaPhi_%d_MinClusters", minNClusters), Form("Track #eta , #phi (NCls >= %d); #eta; #phi", minNClusters), 50, -4, -2, 100, -3.2, 3.2, true);
     getObjectsManager()->startPublishing(mTrackEtaPhiNCls[nHisto].get());
     getObjectsManager()->setDisplayHint(mTrackEtaPhiNCls[nHisto].get(), "colz");
+  }
+
+  if (IsCosmics) {
+    mTrackEta4Cls = std::make_unique<TH1FRatio>("mMFTTrackEta_4_MinClusters", "Track #eta (NCls >= 4); #eta; # entries per orbit", 50, -4, -2, true);
+    getObjectsManager()->startPublishing(mTrackEta4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackEta4Cls.get(), "hist");
+
+    mTrackPhi4Cls = std::make_unique<TH1FRatio>("mMFTTrackPhi_4_MinClusters", "Track #phi (NCls >= 4); #phi; # entries per orbit", 100, -3.2, 3.2, true);
+    getObjectsManager()->startPublishing(mTrackPhi4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackPhi4Cls.get(), "hist");
+
+    mTrackXY4Cls = std::make_unique<TH2FRatio>("mMFTTrackXY_4_MinClusters", "Track Position (NCls >= 4); x; y", 320, -16, 16, 320, -16, 16, true);
+    getObjectsManager()->startPublishing(mTrackXY4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackXY4Cls.get(), "logz colz");
+
+    mTrackEtaPhi4Cls = std::make_unique<TH2FRatio>("mMFTTrackEtaPhi_4_MinClusters", "Track #eta , #phi (NCls >= 4); #eta; #phi", 50, -4, -2, 100, -3.2, 3.2, true);
+    getObjectsManager()->startPublishing(mTrackEtaPhi4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackEtaPhi4Cls.get(), "colz");
   }
 
   mCATrackEta = std::make_unique<TH1FRatio>("CA/mMFTCATrackEta", "CA Track #eta; #eta; # entries per orbit", 50, -4, -2, true);
@@ -276,6 +300,13 @@ void QcMFTTrackTask::monitorData(o2::framework::ProcessingContext& ctx)
       }
     }
 
+    if (mTrackEta4Cls && oneTrack.getNumberOfPoints() >= 4) {
+      mTrackEta4Cls->getNum()->Fill(oneTrack.getEta());
+      mTrackPhi4Cls->getNum()->Fill(oneTrack.getPhi());
+      mTrackXY4Cls->getNum()->Fill(oneTrack.getX(), oneTrack.getY());
+      mTrackEtaPhi4Cls->getNum()->Fill(oneTrack.getEta(), oneTrack.getPhi());
+    }
+
     if (oneTrack.getCharge() == +1) {
       mPositiveTrackPhi->getNum()->Fill(oneTrack.getPhi());
       mTrackInvQPt->getNum()->Fill(1 / oneTrack.getPt());
@@ -317,6 +348,12 @@ void QcMFTTrackTask::monitorData(o2::framework::ProcessingContext& ctx)
     mTrackXYNCls[nHisto]->getDen()->SetBinContent(1, 1, mTrackXYNCls[nHisto]->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
     mTrackEtaPhiNCls[nHisto]->getDen()->SetBinContent(1, 1, mTrackEtaPhiNCls[nHisto]->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
   }
+  if (mTrackEta4Cls) {
+    mTrackEta4Cls->getDen()->SetBinContent(1, mTrackEta4Cls->getDen()->GetBinContent(1) + mNOrbitsPerTF);
+    mTrackPhi4Cls->getDen()->SetBinContent(1, mTrackPhi4Cls->getDen()->GetBinContent(1) + mNOrbitsPerTF);
+    mTrackXY4Cls->getDen()->SetBinContent(1, 1, mTrackXY4Cls->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
+    mTrackEtaPhi4Cls->getDen()->SetBinContent(1, 1, mTrackEtaPhi4Cls->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
+  }
   mCATrackEta->getDen()->SetBinContent(1, mCATrackEta->getDen()->GetBinContent(1) + mNOrbitsPerTF);
   mLTFTrackEta->getDen()->SetBinContent(1, mLTFTrackEta->getDen()->GetBinContent(1) + mNOrbitsPerTF);
   mCATrackPt->getDen()->SetBinContent(1, mCATrackPt->getDen()->GetBinContent(1) + mNOrbitsPerTF);
@@ -349,6 +386,12 @@ void QcMFTTrackTask::endOfCycle()
     mTrackPhiNCls[nHisto]->update();
     mTrackXYNCls[nHisto]->update();
     mTrackEtaPhiNCls[nHisto]->update();
+  }
+  if (mTrackEta4Cls) {
+    mTrackEta4Cls->update();
+    mTrackPhi4Cls->update();
+    mTrackXY4Cls->update();
+    mTrackEtaPhi4Cls->update();
   }
   mCATrackEta->update();
   mLTFTrackEta->update();
@@ -389,6 +432,12 @@ void QcMFTTrackTask::reset()
     mTrackPhiNCls[nHisto]->Reset();
     mTrackXYNCls[nHisto]->Reset();
     mTrackEtaPhiNCls[nHisto]->Reset();
+  }
+  if (mTrackEta4Cls) {
+    mTrackEta4Cls->Reset();
+    mTrackPhi4Cls->Reset();
+    mTrackXY4Cls->Reset();
+    mTrackEtaPhi4Cls->Reset();
   }
   mCATrackEta->Reset();
   mLTFTrackEta->Reset();
