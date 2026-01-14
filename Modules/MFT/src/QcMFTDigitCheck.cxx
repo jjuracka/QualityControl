@@ -444,7 +444,7 @@ void QcMFTDigitCheck::beautify(std::shared_ptr<MonitorObject> mo, Quality checkR
           msg->AddText("No action needed");
         } else if (mQualityMedium) {
           QualityColor = kOrange;
-          msg->AddText("Write a logbook entry tagging MFT");
+          msg->AddText("Refer to QC instructions");
         } else if (mQualityBad) {
           QualityColor = kRed;
           msg->AddText("Call the on-call!");
