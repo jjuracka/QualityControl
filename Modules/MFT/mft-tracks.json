@@ -38,7 +38,8 @@
           "ROFLengthInBC" : "198",
           "MaxTrackROFSize" : "1000",
           "MaxDuration" : "60000",
-          "TimeBinSize" : "0.1"
+          "TimeBinSize" : "0.1",
+          "IsCosmics" : "false"
         },
         "grpGeomRequest" : {
             "geomRequest": "None",
