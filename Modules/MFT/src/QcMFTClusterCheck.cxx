@@ -331,7 +331,7 @@ void QcMFTClusterCheck::beautify(std::shared_ptr<MonitorObject> mo, Quality chec
       msg1->SetFillColor(kOrange);
       msg1->Draw();
       msg2->Clear();
-      msg2->AddText("Write a logbook entry tagging MFT");
+      msg2->AddText("Refer to QC instructions");
       msg2->SetFillColor(kOrange);
       msg2->Draw();
     } else if (checkResult == Quality::Bad) {
