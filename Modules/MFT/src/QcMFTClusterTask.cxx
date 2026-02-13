@@ -412,13 +412,12 @@ void QcMFTClusterTask::endOfCycle()
     for (auto nMFTLayer = 0; nMFTLayer < 10; nMFTLayer++) { // there are 10 layers
       mClusterXYinLayer[nMFTLayer]->update();
       mClusterRinLayer[nMFTLayer]->update();
-      mClusterRinLayer[nMFTLayer]->SetTitle("Cluster Radial Position in all MFT Layers; r (cm); # entries");
-      mClusterRinLayer[nMFTLayer]->SetLineColor(TColor::GetColor(mColors[nMFTLayer]));
-      mClusterRinLayer[nMFTLayer]->SetMarkerColor(TColor::GetColor(mColors[nMFTLayer]));
-      mClusterRinLayer[nMFTLayer]->SetLineWidth(2);
-      mClusterRinLayer[nMFTLayer]->SetStats(0);
-      mClusterRinLayer[nMFTLayer]->Draw(nMFTLayer == 0 ? "hist" : "hist same");
-      mClusterRinAllLayersLegend->AddEntry(mClusterRinLayer[nMFTLayer]->getNum(), Form("layer %d", nMFTLayer), "lep");
+      mClusterRinLayer[nMFTLayer]->getNum()->SetTitle("Cluster Radial Position in all MFT Layers; r (cm); # entries");
+      mClusterRinLayer[nMFTLayer]->getNum()->SetLineColor(TColor::GetColor(mColors[nMFTLayer]));
+      mClusterRinLayer[nMFTLayer]->getNum()->SetLineWidth(2);
+      mClusterRinLayer[nMFTLayer]->getNum()->SetStats(0);
+      mClusterRinLayer[nMFTLayer]->getNum()->Draw(nMFTLayer == 0 ? "hist" : "hist same");
+      mClusterRinAllLayersLegend->AddEntry(mClusterRinLayer[nMFTLayer]->getNum(), Form("layer %d", nMFTLayer), "l");
     }
     mClusterRinAllLayersLegend->Draw();
   }
