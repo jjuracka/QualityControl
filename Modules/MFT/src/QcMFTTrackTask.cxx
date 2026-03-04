@@ -85,10 +85,10 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
     TimeBinSize = stof(param->second);
   }
 
-  auto IsCosmics = false;
+  auto mIsCosmics = 0;
   if (auto param = mCustomParameters.find("IsCosmics"); param != mCustomParameters.end()) {
     ILOG(Debug, Devel) << "Custom parameter - IsCosmics: " << param->second << ENDM;
-    IsCosmics = (param->second == "true");
+    mIsCosmics = stoi(param->second);
   }
 
   auto NofTimeBins = static_cast<int>(MaxDuration / TimeBinSize);
@@ -164,7 +164,7 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
     getObjectsManager()->setDisplayHint(mTrackEtaPhiNCls[nHisto].get(), "colz");
   }
 
-  if (IsCosmics) {
+  if (mIsCosmics == 1) { // only create these histograms for cosmics
     mTrackEta4Cls = std::make_unique<TH1FRatio>("mMFTTrackEta_4_MinClusters", "Track #eta (NCls >= 4); #eta; # entries per orbit", 50, -4, -2, true);
     getObjectsManager()->startPublishing(mTrackEta4Cls.get());
     getObjectsManager()->setDisplayHint(mTrackEta4Cls.get(), "hist");

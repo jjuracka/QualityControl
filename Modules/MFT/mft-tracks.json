@@ -39,7 +39,7 @@
           "MaxTrackROFSize" : "1000",
           "MaxDuration" : "60000",
           "TimeBinSize" : "0.1",
-          "IsCosmics" : "false"
+          "IsCosmics" : "0"
         },
         "grpGeomRequest" : {
             "geomRequest": "None",
