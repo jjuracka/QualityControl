@@ -297,6 +297,13 @@ void QcMFTTrackTask::monitorData(o2::framework::ProcessingContext& ctx)
       }
     }
 
+    if (mActivity->mType == "COSMICS" && oneTrack.getNumberOfPoints() >= 4) {
+      mTrackEta4Cls->getNum()->Fill(oneTrack.getEta());
+      mTrackPhi4Cls->getNum()->Fill(oneTrack.getPhi());
+      mTrackXY4Cls->getNum()->Fill(oneTrack.getX(), oneTrack.getY());
+      mTrackEtaPhi4Cls->getNum()->Fill(oneTrack.getEta(), oneTrack.getPhi());
+    }
+
     if (oneTrack.getCharge() == +1) {
       mPositiveTrackPhi->getNum()->Fill(oneTrack.getPhi());
       mTrackInvQPt->getNum()->Fill(1 / oneTrack.getPt());
@@ -338,6 +345,12 @@ void QcMFTTrackTask::monitorData(o2::framework::ProcessingContext& ctx)
     mTrackXYNCls[nHisto]->getDen()->SetBinContent(1, 1, mTrackXYNCls[nHisto]->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
     mTrackEtaPhiNCls[nHisto]->getDen()->SetBinContent(1, 1, mTrackEtaPhiNCls[nHisto]->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
   }
+  if (mActivity->mType == "COSMICS") {
+    mTrackEta4Cls->getDen()->SetBinContent(1, mTrackEta4Cls->getDen()->GetBinContent(1) + mNOrbitsPerTF);
+    mTrackPhi4Cls->getDen()->SetBinContent(1, mTrackPhi4Cls->getDen()->GetBinContent(1) + mNOrbitsPerTF);
+    mTrackXY4Cls->getDen()->SetBinContent(1, 1, mTrackXY4Cls->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
+    mTrackEtaPhi4Cls->getDen()->SetBinContent(1, 1, mTrackEtaPhi4Cls->getDen()->GetBinContent(1, 1) + mNOrbitsPerTF);
+  }
   mCATrackEta->getDen()->SetBinContent(1, mCATrackEta->getDen()->GetBinContent(1) + mNOrbitsPerTF);
   mLTFTrackEta->getDen()->SetBinContent(1, mLTFTrackEta->getDen()->GetBinContent(1) + mNOrbitsPerTF);
   mCATrackPt->getDen()->SetBinContent(1, mCATrackPt->getDen()->GetBinContent(1) + mNOrbitsPerTF);
@@ -371,6 +384,12 @@ void QcMFTTrackTask::endOfCycle()
     mTrackPhiNCls[nHisto]->update();
     mTrackXYNCls[nHisto]->update();
     mTrackEtaPhiNCls[nHisto]->update();
+  }
+  if (mActivity->mType == "COSMICS") {
+    mTrackEta4Cls->update();
+    mTrackPhi4Cls->update();
+    mTrackXY4Cls->update();
+    mTrackEtaPhi4Cls->update();
   }
   mCATrackEta->update();
   mLTFTrackEta->update();
@@ -411,6 +430,12 @@ void QcMFTTrackTask::reset()
     mTrackPhiNCls[nHisto]->Reset();
     mTrackXYNCls[nHisto]->Reset();
     mTrackEtaPhiNCls[nHisto]->Reset();
+  }
+  if (mActivity->mType == "COSMICS") {
+    mTrackEta4Cls->Reset();
+    mTrackPhi4Cls->Reset();
+    mTrackXY4Cls->Reset();
+    mTrackEtaPhi4Cls->Reset();
   }
   mCATrackEta->Reset();
   mLTFTrackEta->Reset();
