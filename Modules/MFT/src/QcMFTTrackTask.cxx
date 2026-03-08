@@ -158,6 +158,24 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
     getObjectsManager()->setDisplayHint(mTrackEtaPhiNCls[nHisto].get(), "colz");
   }
 
+  if (mActivity->mType == "COSMICS") { // only create these histograms for cosmics
+    mTrackEta4Cls = std::make_unique<TH1FRatio>("mMFTTrackEta_4_MinClusters", "Track #eta (NCls >= 4); #eta; # entries per orbit", 50, -4, -2, true);
+    getObjectsManager()->startPublishing(mTrackEta4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackEta4Cls.get(), "hist");
+
+    mTrackPhi4Cls = std::make_unique<TH1FRatio>("mMFTTrackPhi_4_MinClusters", "Track #phi (NCls >= 4); #phi; # entries per orbit", 100, -3.2, 3.2, true);
+    getObjectsManager()->startPublishing(mTrackPhi4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackPhi4Cls.get(), "hist");
+
+    mTrackXY4Cls = std::make_unique<TH2FRatio>("mMFTTrackXY_4_MinClusters", "Track Position (NCls >= 4); x; y", 320, -16, 16, 320, -16, 16, true);
+    getObjectsManager()->startPublishing(mTrackXY4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackXY4Cls.get(), "logz colz");
+
+    mTrackEtaPhi4Cls = std::make_unique<TH2FRatio>("mMFTTrackEtaPhi_4_MinClusters", "Track #eta , #phi (NCls >= 4); #eta; #phi", 50, -4, -2, 100, -3.2, 3.2, true);
+    getObjectsManager()->startPublishing(mTrackEtaPhi4Cls.get());
+    getObjectsManager()->setDisplayHint(mTrackEtaPhi4Cls.get(), "colz");
+  }
+
   mCATrackEta = std::make_unique<TH1FRatio>("CA/mMFTCATrackEta", "CA Track #eta; #eta; # entries per orbit", 50, -4, -2, true);
   getObjectsManager()->startPublishing(mCATrackEta.get());
   getObjectsManager()->setDisplayHint(mCATrackEta.get(), "hist");
