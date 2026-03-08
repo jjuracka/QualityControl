@@ -59,7 +59,7 @@ class QcMFTTrackTask /*final*/ : public TaskInterface // todo add back the "fina
   void reset() override;
 
  private:
-  std::shared_ptr<Activity> mActivity = nullptr;
+  std::unique_ptr<Activity> mActivity = nullptr;
 
   o2::mft::GeometryTGeo* mGeom = nullptr;
 

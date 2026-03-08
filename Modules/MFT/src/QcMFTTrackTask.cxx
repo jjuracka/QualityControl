@@ -218,7 +218,7 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
 void QcMFTTrackTask::startOfActivity(const Activity& activity)
 {
   ILOG(Debug, Devel) << "startOfActivity" << ENDM;
-  mActivity = make_shared<Activity>(activity);
+  mActivity = make_unique<Activity>(activity);
 
   // reset histograms
   reset();
