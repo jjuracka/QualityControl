@@ -197,9 +197,10 @@ void QcMFTTrackTask::initialize(o2::framework::InitContext& /*ctx*/)
   getObjectsManager()->setDisplayHint(mClusterRatioVsBunchCrossing.get(), "colz logz");
 }
 
-void QcMFTTrackTask::startOfActivity(const Activity& /*activity*/)
+void QcMFTTrackTask::startOfActivity(const Activity& activity)
 {
   ILOG(Debug, Devel) << "startOfActivity" << ENDM;
+  mActivity = make_shared<Activity>(activity);
 
   // reset histograms
   reset();
