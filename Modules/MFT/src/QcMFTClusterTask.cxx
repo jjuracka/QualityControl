@@ -28,8 +28,6 @@
 #include <TH2.h>
 #include <TString.h>
 #include <TAxis.h>
-#include <THStack.h>
-#include <TColor.h>
 // O2
 #include <DataFormatsITSMFT/CompCluster.h>
 #include <Framework/InputRecord.h>
@@ -256,15 +254,6 @@ void QcMFTClusterTask::initialize(o2::framework::InitContext& /*ctx*/)
       getObjectsManager()->startPublishing(mClusterRinLayer[nMFTLayer].get());
       getObjectsManager()->setDisplayHint(mClusterRinLayer[nMFTLayer].get(), "hist");
     }
-    // canvas for for cluster R in all layers
-    mClusterRinAllLayers = std::make_unique<TCanvas>("mClusterRinAllLayers", "Cluster Radial Position in All MFT Layers");
-    getObjectsManager()->startPublishing(mClusterRinAllLayers.get());
-    mClusterRinAllLayersStack = std::make_unique<THStack>("mClusterRinAllLayersStack", "Cluster Radial Position in All MFT Layers; r (cm); # entries");
-    for (auto nMFTLayer = 0; nMFTLayer < 10; nMFTLayer++) {
-      mClusterRinLayer[nMFTLayer]->getNum()->SetLineColor(TColor::GetColor(mColors[nMFTLayer]));
-      mClusterRinLayer[nMFTLayer]->getNum()->SetTitle(Form("D%dF%d", static_cast<int>(std::floor(nMFTLayer / 2.)), nMFTLayer % 2 == 0 ? 0 : 1));
-      mClusterRinAllLayersStack->Add(mClusterRinLayer[nMFTLayer]->getNum());
-    }
   }
 }
 
@@ -415,7 +404,6 @@ void QcMFTClusterTask::endOfCycle()
       mClusterXYinLayer[nMFTLayer]->update();
       mClusterRinLayer[nMFTLayer]->update();
     }
-    updateCanvas();
   }
 }
 
@@ -448,7 +436,6 @@ void QcMFTClusterTask::reset()
       mClusterXYinLayer[nMFTLayer]->Reset();
       mClusterRinLayer[nMFTLayer]->Reset();
     }
-    mClusterRinAllLayers->Clear();
   }
 }
 
@@ -469,15 +456,6 @@ void QcMFTClusterTask::getChipMapData()
     mX[i] = MFTTable.mX[i];
     mY[i] = MFTTable.mY[i];
   }
-}
-
-void QcMFTClusterTask::updateCanvas()
-{
-  mClusterRinAllLayers->cd();
-  mClusterRinAllLayers->Clear();
-  mClusterRinAllLayersStack->Draw("nostack hist");
-  mClusterRinAllLayers->Update();
-  gPad->BuildLegend(0.83, 0.50, 0.90, 0.90, "", "l");
 }
 
 } // namespace o2::quality_control_modules::mft
