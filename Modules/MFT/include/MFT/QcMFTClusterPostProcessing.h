@@ -23,6 +23,8 @@
 #include <TH1F.h>
 #include <TCanvas.h>
 #include <THStack.h>
+#include <TLegend.h>
+#include <TString.h>
 #include <TColor.h>
 
 namespace o2::quality_control_modules::mft
@@ -46,6 +48,8 @@ class QcMFTClusterPostProcessing final : public quality_control::postprocessing:
  private:
   std::unique_ptr<TCanvas> mCanvas = nullptr;
   std::unique_ptr<THStack> mStack = nullptr;
+  std::unique_ptr<TLegend> mLegend = nullptr;
+  const TString mColors[10] = { "#1F77B4", "#FF7F0E", "#2CA02C", "#D62728", "#8C564B", "#E377C2", "#9467BD", "#BCBD22", "#7F7F7F", "#17BECF" };
 };
 
 } // namespace o2::quality_control_modules::mft
